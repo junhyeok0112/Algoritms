@@ -32,8 +32,18 @@ public class P17398_통신망_분할 {
         p = new int[n+1];
         Arrays.fill(p ,-1);
         for(int i = 0 ; i<m ;i++){
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            merge(x,y);
+            arr.add(new P17398(x,y));               //i-1번째에 들어가 있음
+        }
+
+        for(int i =0 ;i<q;i++){
+            int num = Integer.parseInt(br.readLine()) - 1;
 
         }
+
     }
 
     static int find(int x){
