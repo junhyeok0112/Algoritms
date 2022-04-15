@@ -27,7 +27,7 @@ public class P14501_퇴사_re {
         int max = 0;
         for(int i = 1; i<=n+1 ;i++){
             dp[i] = Math.max(dp[i],max);    //만약 갱신이 안되는 경우 이전 값들 중 최대 값을 저장해야한다.
-            if(i+t[i]-1<=n){            //i일에서 t[i]만큼 일할때 n 범위 안이면 , dp[i+t[i]]의 기존 값과 , 시작날 dp[i] + 비용 p[i] 의 값중 큰 것이 일이 끝났을때 받을 수 있는 금액의 최대 값이다.
+            if(i+t[i]-1<=n){            //i일에서 t[i]만큼 일할때 n 범위 안이면 단, i= 1부터 시작하므로 일이 범위안에 끝나는지 체크하려면 -1, dp[i+t[i]]의 기존 값과 , 시작날 dp[i] + 비용 p[i] 의 값중 큰 것이 일이 끝났을때 받을 수 있는 금액의 최대 값이다.
                 dp[i+t[i]] = Math.max(dp[i+t[i]] , dp[i]+p[i]);
             }
             max = Math.max(dp[i],max);
