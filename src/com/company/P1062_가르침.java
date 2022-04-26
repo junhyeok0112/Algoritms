@@ -24,8 +24,11 @@ public class P1062_가르침 {
         if(k < 5){      //n이 5보다 작으면 어떠한 단어도 읽을 수 없음
             System.out.println(0);
             return;
+        } else if( k == 26){   //모든 글 읽을 수 있을 경우
+            System.out.println(n);
+            return;
         }
-        k -=5;          //5개 a,n,t,i,c는 기본적으로 가지고 있어야함 visit 체크로 true로 바꿔줌
+//        k -=5;          //5개 a,n,t,i,c는 기본적으로 가지고 있어야함 visit 체크로 true로 바꿔줌
         visit['a'-'a'] = true;
         visit['n'-'a'] = true;
         visit['t'-'a'] = true;
@@ -34,6 +37,8 @@ public class P1062_가르침 {
         arr = new String[n];
         for(int i = 0 ; i<n ;i++){
             arr[i] = br.readLine();
+            arr[i] = arr[i].replace("anta","");
+            arr[i] = arr[i].replace("tica","");
         }
 
         back(0,0);
@@ -42,7 +47,7 @@ public class P1062_가르침 {
 
     public static void back(int cnt , int idx){        //baseNum으로 들어가있는지 체크.
         //기저조건 , cnt == K일때 계산 , idx == n일때 계산 , cnt > k면 return;
-        if(cnt >= k || idx >= 26 ){      //k개를 채웠거나 끝까지 봤을 경우
+        if(cnt >= k -5 ){      //k개를 채웠거나 끝까지 봤을 경우 , 기본적으로 5개는 이미 체크했으므로 5개를 빼야함
             //가능한 문자열 계산해야함
             int ans = 0;
             for(int i = 0 ; i <n ;i++){
@@ -64,10 +69,9 @@ public class P1062_가르침 {
 
         //전부 다 확인해보기
         for(int i = idx ; i< 26;i++){
-           if(i == 'a'-'a' || i=='n'-'a' || i =='t'-'a' || i=='i'-'a' || i =='c'-'a') continue;     //기본적으로 있는 값이면 넘어감
             if(!visit[i]){  //방문 안했으면
                 visit[i] = true;
-                back(cnt+1, idx+1);     //방문 체크하고 다음것부터봐라
+                back(cnt+1, i+1);     //방문 체크하고 다음것부터봐라
                 //다 보고 나오면
                 visit[i] = false;
             }
