@@ -3,34 +3,14 @@ package com.company;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
-
-class P1477 implements Comparable<P1477>{
-    int start;
-    int end ;
-    int dis ;
-    P1477(int start ,int end ,int dis){
-        this.start = start;
-        this.end = end;
-        this.dis = dis;
-    }
-
-    //거리가 먼 것이 앞으로 오게
-    @Override
-    public int compareTo(P1477 o) {
-        return o.dis - this.dis;
-    }
-}
 
 public class P1477_휴게소세우기 {
 
     static int n , m,l;
     static int[] arr;
-    static boolean[] visit;
-    static PriorityQueue<P1477> pq = new PriorityQueue<>();
+    static ArrayList<Integer> arr2 = new ArrayList<>();
 
     //휴게소를 추가로 지었을 때, 휴게소들의 거리가 최소인 값을 구하여라.
     public static void main(String[] args) throws IOException{
@@ -40,42 +20,49 @@ public class P1477_휴게소세우기 {
         m = Integer.parseInt(st.nextToken());
         l = Integer.parseInt(st.nextToken());
         arr = new int[n];                       //휴게소 위치들이 저장되어 있음
-        visit = new boolean[l+1];               //1~l까지 거리 중 휴게소가 있는 거리인지 체크
         st = new StringTokenizer(br.readLine());
         for(int i = 0 ; i<n;i++){
             arr[i] = Integer.parseInt(st.nextToken());
-            visit[arr[i]] = true;
         }
-        visit[0] = true;
-        visit[l] = true;
+
         Arrays.sort(arr);       //세워진 순으로 정렬
+
         for(int i = 0 ;i<n-1 ;i++){
-            int dis = arr[i+1] - arr[i];    //서로의 거리
-            pq.offer(new P1477(arr[i], arr[i+1] , dis));
+            int dis = arr[i+1] - arr[i]-1;    //서로의 거리
+            arr2.add(dis);
         }
-        pq.offer(new P1477(0,arr[0],arr[0]));   //고속도로 시작점과 맨 처음휴게소
-        pq.offer(new P1477(arr[n-1],l,l-arr[n-1])); //고속도로 끝점과 맨 마지막 휴게소
-
-        //M개의 휴게소 세우기
-        for(int k = 0 ; k< m ;k++){
-            P1477 cur = pq.poll();      //최대 거리인거 빼기
-            int start = cur.start;
-            int end = cur.end;
-            int tempStart = start;
-            int tempEnd = end;
-            while (tempStart <= tempEnd){
-                int mid = (tempStart + tempEnd) / 2;        //휴게소를 지을 위치
-                if(visit[mid]){
-                    //방문 한 곳이면
-                    tempEnd = mid -1;
-                } else{     //방문 안했으면
-                    pq.offer(new P1477(start ,mid, mid-start));
-                    pq.offer(new P1477(mid,end,end - mid));
-                    break;
-                }
+        if(n != 0 ){
+            arr2.add(arr[0]-1);   //시작점
+            arr2.add(l-arr[n-1]-1);   //끝점 -> 왜 -1 ? ?
+        } else{
+            arr2.add(l-1);      //n이 0일때 시작지점과 끝점까지의 거리를 구해야한다.
+        }
+        //이분탐색으로 휴게소의 구간의 최대값을 우선 구함
+        //가능하면 그 최대값을 줄여가면서 최소값을 구하는 방식으로
+        int left = 1;
+        int right = l-1;
+        int ans = Integer.MAX_VALUE;
+        int arrSize= arr2.size();
+        while(left <=right){
+            int mid = (left + right) / 2;
+            //구하는 값이 mid 이다 ! 이 mid 값
+            //m개를 세우는 방법 구해야함.
+            int cnt = 0;
+            //거리를 mid로 나눴을때 몫들의 값을 더해야한다 -> 이 값이 0보다 크면 mid 인 값을 만족하려면 몫만큼의 휴게소를 세워야한다는 뜻이다
+            //이 휴게소 갯수들을 구한 뒤 m과 비교한다 -> 같으면 답이 될 수 있고 더 최소값을 구해보기 위해 right 갱신
+            //갯수들이 더 작으면 mid 값을 줄여서 휴게소를 m개 설치해야함 -> right = mid -1;
+            //갯수들이 더 크면 휴게소를 적게 설치해야한다 그러려면 mid 값을 늘려서 만족시켜야하므로 left 갱신
+            for(int i = 0 ; i<arrSize;i++){
+                cnt+=(arr2.get(i) / mid);
             }
-
+            if(cnt <= m){       //cnt가 작을 경우 어떻게 추가적으로 m 개를 채워서 아무데나 세워도 되므로 답이 될 수 있다.
+                ans = mid;
+                right = mid -1;
+            } else{
+                left = mid + 1;
+            }
         }
-        System.out.println(pq.poll().dis);
+
+        System.out.println(ans);
     }
 }
