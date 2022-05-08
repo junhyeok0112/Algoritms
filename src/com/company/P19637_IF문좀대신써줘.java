@@ -23,6 +23,9 @@ public class P19637_IF문좀대신써줘 {
             st = new StringTokenizer(br.readLine());
             title[i] = st.nextToken();
             score[i] = Integer.parseInt(st.nextToken());
+            if(i>=1 && score[i] == score[i-1]){         //1이상이고 이전값과 추가된 값이 같으면 title은 앞에껄로 변경
+                title[i] = title[i-1];
+            }
         }
 
         for(int i= 0; i<m ;i++){
@@ -31,6 +34,7 @@ public class P19637_IF문좀대신써줘 {
         }
         System.out.println(sb.toString());
     }
+
     static void find(int num){
         int left = 0;
         int right = n-1;
@@ -38,18 +42,14 @@ public class P19637_IF문좀대신써줘 {
             int mid = (left + right) / 2;
             if(score[mid] == num){  //같을 경우 같은 점수가 앞에 있을 수도 있으므로 앞에부터 또 탐색
                 //여기서 시간초과 걸러줘야함
-                for(int i = 0 ;i<=mid; i++){
-                    if(score[mid] == score[i]){
-                        sb.append(title[i]).append("\n");
-                        return;
-                    }
-                }
+                //앞에 같은 점수가 존재할 수 있음.
+               break;
             }else if(score[mid] > num){
                 right = mid ;
             }else {
                 left = mid +1;
             }
         }
-        sb.append(title[left]).append("\n");
+        sb.append(title[(left+right)/2]).append("\n");        //왼쪽에 있는 애 출력
     }
 }
