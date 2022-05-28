@@ -12,6 +12,6 @@ public class P6593_상범빌딩 {
 
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st =
+        StringTokenizer st = new StringTokenizer(br.readLine());
     }
 }
