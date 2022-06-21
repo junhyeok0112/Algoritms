@@ -55,6 +55,27 @@ public class P17281_야구 {
                         continue;
                     }
                     // 1,2,3,4 일 때
+                    if(map[ining][order[order_num]] == 4){
+                        for(int i = 0 ; i<4 ;i++){
+                            if(base[i] >= 1 ) {
+                                score++;
+                                base[i] = 0;    //홈런이라 있는 사람들 전부 들어옴
+                            }
+                        }
+                        score++;    //출발 주루
+                    } else{
+                        for(int k = 1 ; k<= map[ining][order[order_num]] ; k++){
+                            for(int i = 3; i>= 1; i--){
+                                base[i] = base[i-1];
+                            }
+                            if(base[3] >= 1 ){  //홈으로 들어왔을 경우1
+                                score++;
+                                base[3] = 0;
+                            }
+                            base[0] = 0;
+                        }
+                        base[map[ining][order[order_num]]-1] = 1; //출발한 주자 셋팅.
+                    }
 
                     order_num++;
                     if(order_num>=10) order_num = 1;
